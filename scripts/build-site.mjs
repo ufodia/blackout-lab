@@ -22,6 +22,8 @@ try {
 }
 
 const files = [
+  ['site/sitemap.xml', 'sitemap.xml'],
+  ['site/robots.txt', 'robots.txt'],
   ['site/google6beb3f6bb777667e.html', 'google6beb3f6bb777667e.html'],
   ['site/index.html', 'index.html'],
   ['site/style.css', 'style.css'],

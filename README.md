@@ -14,6 +14,8 @@
 
 ![Blackout Lab workspace showing dependency selection and baseline-versus-blackout screenshots](docs/assets/workspace.png)
 
+[Public project site](https://blackout-lab.vercel.app/)
+
 ## Rehearse a small piece of the internet going away
 
 A page can depend on a font host, image service, map provider or remote API before anyone presses a button. Blackout Lab makes those dependencies visible and lets you block selected origins inside an isolated test session. The result is a concrete comparison you can inspect and share with a teammate.
