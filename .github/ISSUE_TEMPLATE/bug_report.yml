@@ -1,0 +1,37 @@
+name: Bug report
+description: Report a reproducible local experiment or workspace problem.
+title: '[Bug]: '
+body:
+  - type: markdown
+    attributes:
+      value: 'Use the demo or a synthetic target where possible. Review screenshots, page titles and URL paths before attaching evidence. Follow SECURITY.md for vulnerabilities.'
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and actual behavior
+      description: Explain the operation, the expected outcome, and what happened.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      description: Include the target type, selected origins, and a minimal non-private example.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Operating system and Node version
+      placeholder: 'Windows version; Node 24.x'
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Source commit or version
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Error or evidence
+      description: Remove private page content, titles and path details before posting.

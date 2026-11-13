@@ -1,0 +1,35 @@
+{
+  "name": "blackout-lab",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Find the failure before your users do.",
+  "type": "module",
+  "license": "MIT",
+  "author": "ufodia",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "dev": "node server/start.mjs --dev",
+    "build": "tsc --noEmit && vite build",
+    "preview": "node server/start.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "verify": "npm run typecheck && npm test && npm run build",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "start": "node server/start.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.0",
+    "prettier": "3.10.1",
+    "typescript": "7.0.2",
+    "vite": "8.3.8",
+    "vitest": "5.1.0"
+  },
+  "dependencies": {
+    "playwright": "1.65.0"
+  }
+}

@@ -1,0 +1,22 @@
+name: Feature request
+description: Explain an experiment you cannot perform and a focused improvement.
+title: '[Idea]: '
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What are you trying to learn?
+      description: Describe the dependency or workflow problem without private target details.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Explain the evidence or control that would help.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Current workaround and trade-offs
