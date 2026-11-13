@@ -49,6 +49,8 @@ npm start
 
 Keep the local server running while you use the workspace. The browser-driving backend is part of the application; opening the built HTML directly is insufficient.
 
+The repository also includes a separate public installation site. It explains the tool and shows the built-in demo evidence; experiments run in the local application. See [public-site deployment](docs/deployment.md) for its static Vercel build.
+
 ## What 0.1.0 does
 
 - Opens one HTTP(S) page at a fixed 1440 × 960 viewport in a fresh Chromium context.
@@ -74,16 +76,17 @@ npm run verify
 npm run test:e2e
 ```
 
-`verify` runs type checking, unit tests and a production build. Browser checks require the Chromium installation from setup. See the [verification guide](docs/testing.md) for reproducible checks and the conditions they do not cover.
+`verify` runs type checking, unit tests, the local-application production build and the separate public-site build. Browser checks require the Chromium installation from setup. See the [verification guide](docs/testing.md) for reproducible checks and the conditions they do not cover.
 
-| Documentation                            | Purpose                                                          |
-| ---------------------------------------- | ---------------------------------------------------------------- |
-| [Usage guide](docs/guide.md)             | Demo, origin selection, comparison, reports and troubleshooting  |
-| [Architecture](docs/architecture.md)     | Browser isolation, request routing and the local-server boundary |
-| [Interface reference](docs/reference.md) | Experiment inputs, evidence semantics and data handling          |
-| [Privacy](docs/privacy.md)               | Captured data, sanitization and sensitive report contents        |
-| [Testing](docs/testing.md)               | Source checks, browser checks and manual review                  |
-| [Restore from GitHub](docs/restore.md)   | Rebuild on a replacement computer from `main`                    |
+| Documentation                                | Purpose                                                              |
+| -------------------------------------------- | -------------------------------------------------------------------- |
+| [Usage guide](docs/guide.md)                 | Demo, origin selection, comparison, reports and troubleshooting      |
+| [Architecture](docs/architecture.md)         | Browser isolation, request routing and the local-server boundary     |
+| [Interface reference](docs/reference.md)     | Experiment inputs, evidence semantics and data handling              |
+| [Privacy](docs/privacy.md)                   | Captured data, sanitization and sensitive report contents            |
+| [Testing](docs/testing.md)                   | Source checks, browser checks and manual review                      |
+| [Restore from GitHub](docs/restore.md)       | Rebuild on a replacement computer from `main`                        |
+| [Public-site deployment](docs/deployment.md) | Build the static installation site separately from the local scanner |
 
 ## Support the next useful experiment
 

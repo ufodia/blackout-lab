@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Rehearse a dependency outage before your users encounter it. Blackout Lab compares real Chromium captures and request observations on your own computer."
+    />
+    <meta name="theme-color" content="#0b131e" />
+    <title>Blackout Lab — Find the failure before your users do</title>
+    <link rel="icon" href="assets/mark.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="site.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header wrap">
+      <a class="brand" href="#" aria-label="Blackout Lab home">
+        <img src="assets/mark.svg" alt="" width="35" height="39" />
+        <span>blackout<span>lab</span><sup>↗</sup></span>
+      </a>
+      <nav aria-label="Main navigation">
+        <a href="#how-it-works">The experiment</a>
+        <a href="#install">Run locally</a>
+        <a href="https://github.com/ufodia/blackout-lab" target="_blank" rel="noopener noreferrer"
+          >GitHub <span aria-hidden="true">↗</span></a
+        >
+      </nav>
+      <a
+        class="support-link"
+        href="https://buymeacoffee.com/ufodia"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+        >
+          <path
+            d="M4 7h13v8a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V7Zm13 1h2a3 3 0 0 1 0 6h-2M7 2v2m4-2v2m4-2v2"
+          />
+        </svg>
+        <span>Keep the lab running</span>
+      </a>
+    </header>
+
+    <main id="main">
+      <section class="hero wrap" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">
+            <span class="signal-dot"></span> CONTROLLED OUTAGES. USEFUL ANSWERS.
+          </p>
+          <h1 id="hero-title">Know what breaks.<br /><span>Before it breaks.</span></h1>
+          <p class="hero-description">
+            Switch off a dependency in a fresh test browser. See what disappears, inspect the
+            requests, and keep the evidence.
+          </p>
+          <div class="hero-actions">
+            <a class="button amber" href="#install"
+              >Run locally <span aria-hidden="true">↗</span></a
+            >
+            <a
+              class="button outline"
+              href="https://github.com/ufodia/blackout-lab"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Explore the source <span aria-hidden="true">→</span></a
+            >
+          </div>
+          <p class="hero-footnote">
+            Open source. MIT licensed. The browser-driving app runs on your computer.
+          </p>
+        </div>
+        <div
+          class="experiment-art"
+          role="img"
+          aria-label="Illustration of a web page connected to three services, with one connection deliberately interrupted"
+        >
+          <div class="art-label"><span>THE IDEA</span><span>NOT A LIVE TEST</span></div>
+          <svg class="circuit-art" viewBox="0 0 460 320" fill="none" aria-hidden="true">
+            <defs>
+              <pattern id="circuit-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                <circle cx="1" cy="1" r="1" fill="#31495e" fill-opacity=".55" />
+              </pattern>
+              <radialGradient id="circuit-glow">
+                <stop stop-color="#355062" stop-opacity=".35" />
+                <stop offset="1" stop-color="#142333" stop-opacity="0" />
+              </radialGradient>
+            </defs>
+            <rect width="460" height="320" fill="url(#circuit-grid)" />
+            <ellipse cx="231" cy="162" rx="220" ry="150" fill="url(#circuit-glow)" />
+            <path
+              d="M193 166H112V82H63M267 143h73V83h53M267 187h73v58h53"
+              stroke="#547489"
+              stroke-width="1.5"
+            />
+            <path d="M340 112v37" stroke="#ffc06d" stroke-width="3" />
+            <path d="m334 144 12 12m0-12-12 12" stroke="#ffc06d" stroke-width="1.5" />
+            <path d="M340 158v29" stroke="#bd9158" stroke-width="1.5" stroke-dasharray="3 5" />
+            <circle cx="112" cy="166" r="3" fill="#91c7b3" />
+            <circle cx="340" cy="83" r="3" fill="#91c7b3" />
+            <circle cx="340" cy="245" r="3" fill="#ffc06d" />
+            <rect x="182" y="115" width="96" height="100" rx="9" fill="#142737" stroke="#6b8495" />
+            <rect x="192" y="125" width="76" height="80" rx="4" stroke="#344c60" />
+            <path d="M217 147h26m-26 8h26m-26 8h17" stroke="#8facbf" stroke-width="1.5" />
+            <path d="m228 177 5-9-1 8h6l-8 11 2-10h-4Z" fill="#ffc06d" />
+            <rect x="27" y="54" width="109" height="54" rx="6" fill="#142636" stroke="#3a586d" />
+            <rect x="326" y="54" width="109" height="54" rx="6" fill="#142636" stroke="#3a586d" />
+            <rect x="326" y="217" width="109" height="54" rx="6" fill="#2b291f" stroke="#937044" />
+            <text
+              x="81"
+              y="77"
+              text-anchor="middle"
+              font-size="10"
+              fill="#9db4c5"
+              font-family="monospace"
+            >
+              FONT HOST
+            </text>
+            <text
+              x="81"
+              y="94"
+              text-anchor="middle"
+              font-size="9"
+              fill="#658399"
+              font-family="monospace"
+            >
+              AN ORIGIN
+            </text>
+            <text
+              x="380"
+              y="77"
+              text-anchor="middle"
+              font-size="10"
+              fill="#9db4c5"
+              font-family="monospace"
+            >
+              IMAGE CDN
+            </text>
+            <text
+              x="380"
+              y="94"
+              text-anchor="middle"
+              font-size="9"
+              fill="#658399"
+              font-family="monospace"
+            >
+              AN ORIGIN
+            </text>
+            <text
+              x="380"
+              y="240"
+              text-anchor="middle"
+              font-size="10"
+              fill="#ecc38a"
+              font-family="monospace"
+            >
+              MAP SERVICE
+            </text>
+            <text
+              x="380"
+              y="257"
+              text-anchor="middle"
+              font-size="9"
+              fill="#b79566"
+              font-family="monospace"
+            >
+              SWITCHED OFF
+            </text>
+            <text
+              x="230"
+              y="239"
+              text-anchor="middle"
+              font-size="10"
+              fill="#a4bbcb"
+              font-family="monospace"
+              letter-spacing="1"
+            >
+              YOUR PAGE
+            </text>
+          </svg>
+          <p>One small switch.<br /><strong>A more useful conversation.</strong></p>
+        </div>
+      </section>
+
+      <section class="workspace-section wrap" aria-labelledby="workspace-title">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">THE WORKSPACE / REAL LOCAL CAPTURE</p>
+            <h2 id="workspace-title">Same page. Different conditions.</h2>
+          </div>
+          <span class="capture-label"><i></i> BUILT-IN DEMO</span>
+        </div>
+        <figure class="workspace-figure">
+          <a
+            class="workspace-image-link"
+            href="assets/workspace.png"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Open the full Blackout Lab workspace screenshot"
+          >
+            <div class="workspace-window-bar">
+              <span><i></i><i></i><i></i></span><span>BLACKOUT LAB / LOCAL WORKSPACE</span
+              ><span>↗</span>
+            </div>
+            <div class="workspace-image-crop">
+              <img
+                src="assets/workspace.png"
+                width="1440"
+                height="1945"
+                alt="Actual Blackout Lab demo run: a normal map appears in the baseline, selected origins are blocked in the experiment, and three unsuccessful requests are recorded."
+                decoding="async"
+                fetchpriority="high"
+              />
+            </div>
+          </a>
+          <figcaption>
+            <span>A real run against the included local demo. Screenshot cropped for detail.</span
+            ><a href="assets/workspace.png" target="_blank" rel="noopener noreferrer"
+              >Open full screenshot <span aria-hidden="true">↗</span></a
+            >
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="how-section wrap section-space" id="how-it-works" aria-labelledby="how-title">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">A SMALL EXPERIMENT, END TO END</p>
+            <h2 id="how-title">From dependency to evidence.</h2>
+          </div>
+          <p class="section-aside">No resilience score.<br />Something you can actually inspect.</p>
+        </div>
+        <div class="workflow-grid">
+          <article>
+            <span class="step-index">01 / OBSERVE</span>
+            <div class="workflow-symbol" aria-hidden="true">◎</div>
+            <h3>Meet the origins.</h3>
+            <p>
+              Open one page in a fresh Chromium session. See the origins and resource types it
+              requests during the capture.
+            </p>
+          </article>
+          <article>
+            <span class="step-index">02 / CHOOSE</span>
+            <div class="workflow-symbol" aria-hidden="true">⌁</div>
+            <h3>Pick the outage.</h3>
+            <p>
+              Select external origins to block. Your target’s own origin stays on, so you can
+              isolate a dependency.
+            </p>
+          </article>
+          <article>
+            <span class="step-index">03 / COMPARE</span>
+            <div class="workflow-symbol" aria-hidden="true">◫</div>
+            <h3>Watch the difference.</h3>
+            <p>
+              Compare a normal page load with a second fresh capture that aborts requests to the
+              selected origins.
+            </p>
+          </article>
+          <article>
+            <span class="step-index">04 / KEEP</span>
+            <div class="workflow-symbol" aria-hidden="true">↧</div>
+            <h3>Take the evidence.</h3>
+            <p>
+              Save the screenshots and observations in a standalone HTML report or a JSON file,
+              right on your computer.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section
+        class="install-section wrap section-space"
+        id="install"
+        aria-labelledby="install-title"
+      >
+        <div class="install-copy">
+          <p class="eyebrow"><span class="signal-dot"></span> YOUR COMPUTER IS THE LAB</p>
+          <h2 id="install-title">A local tool.<br /><span>A useful habit.</span></h2>
+          <p>
+            The public site introduces the project. The working application starts locally, with its
+            own browser-driving backend.
+          </p>
+          <ul class="requirements">
+            <li><span>RUNTIME</span><strong>Node.js 24 LTS</strong></li>
+            <li><span>SOURCE</span><strong>Git + npm</strong></li>
+            <li><span>TEST BROWSER</span><strong>Playwright Chromium</strong></li>
+          </ul>
+          <a
+            class="text-link"
+            href="https://github.com/ufodia/blackout-lab/blob/main/docs/guide.md"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Read the complete setup guide <span aria-hidden="true">→</span></a
+          >
+        </div>
+        <div class="install-terminal">
+          <div class="terminal-header">
+            <span><i></i> GET THE LOCAL LAB</span
+            ><button id="copy-install" type="button" aria-label="Copy install commands">
+              Copy commands <span aria-hidden="true">⧉</span>
+            </button>
+          </div>
+          <pre><code id="install-commands">git clone https://github.com/ufodia/blackout-lab.git
+cd blackout-lab
+npm ci
+npx playwright install --no-shell chromium
+npm run dev</code></pre>
+          <div class="terminal-footer">
+            <span class="terminal-prompt" aria-hidden="true">›</span>
+            <p>
+              Open the local address printed in your terminal.<br />Normally
+              <code>http://127.0.0.1:5173</code>.
+            </p>
+          </div>
+          <p class="copy-status" id="copy-status" role="status" aria-live="polite"></p>
+        </div>
+        <p class="windows-note">
+          <strong>Using Windows PowerShell?</strong> If script policy blocks the launchers, use
+          <code>npm.cmd</code> and <code>npx.cmd</code>. Keep the local server running while you use
+          the workspace.
+        </p>
+      </section>
+
+      <section class="demo-section wrap" aria-labelledby="demo-title">
+        <div class="demo-heading">
+          <span class="eyebrow">YOUR FIRST EXPERIMENT</span>
+          <h2 id="demo-title">Start with a failure you can repeat.</h2>
+          <p>
+            The included local demo makes the first rehearsal independent of a changing internet
+            service.
+          </p>
+        </div>
+        <ol class="demo-steps">
+          <li>
+            <span>01</span>
+            <div>
+              <h3>Use demo → Inspect target</h3>
+              <p>
+                Open the app, select the built-in target, and let the fresh browser discover its
+                requests.
+              </p>
+            </div>
+          </li>
+          <li>
+            <span>02</span>
+            <div>
+              <h3>Switch off its external origin</h3>
+              <p>
+                Select the demo’s external fixture origin in the switchboard. Keep the target’s own
+                origin on.
+              </p>
+            </div>
+          </li>
+          <li>
+            <span>03</span>
+            <div>
+              <h3>Run rehearsal → Compare</h3>
+              <p>Inspect the missing map, review the request observations, and save the report.</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <section class="locality-section wrap section-space" aria-labelledby="locality-title">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">A CLEAR BOUNDARY</p>
+            <h2 id="locality-title">The experiment stays in your hands.</h2>
+          </div>
+          <a
+            class="text-link"
+            href="https://github.com/ufodia/blackout-lab/blob/main/docs/privacy.md"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Read the privacy notes <span aria-hidden="true">↗</span></a
+          >
+        </div>
+        <div class="locality-grid">
+          <article>
+            <span class="locality-number">A</span>
+            <h3>Fresh browser sessions.</h3>
+            <p>
+              Captures do not copy your everyday browser login or cookies. Use pages and test
+              environments you own or have permission to examine.
+            </p>
+          </article>
+          <article>
+            <span class="locality-number">B</span>
+            <h3>Local screenshots and reports.</h3>
+            <p>
+              There is no hosted audit service or cloud report upload. The test browser still
+              contacts the target and its unblocked dependencies. Reports can contain page content
+              and URL paths; review them before sharing.
+            </p>
+          </article>
+          <article>
+            <span class="locality-number">C</span>
+            <h3>Evidence with a defined scope.</h3>
+            <p>
+              Each condition captures one navigation and a bounded observation window. It does not
+              exercise every interaction, login flow or WebSocket. A complete-looking screenshot is
+              not a resilience certification.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="docs-section wrap" aria-labelledby="docs-title">
+        <div>
+          <p class="eyebrow">OPEN THE NOTEBOOK</p>
+          <h2 id="docs-title">Understand the experiment.</h2>
+          <p>The source, boundaries and reproducible checks are documented in the repository.</p>
+        </div>
+        <div class="doc-links">
+          <a
+            href="https://github.com/ufodia/blackout-lab/blob/main/docs/guide.md"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><span>First experiment</span><small>Setup, demo and troubleshooting</small
+            ><b aria-hidden="true">↗</b></a
+          ><a
+            href="https://github.com/ufodia/blackout-lab/blob/main/docs/architecture.md"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><span>Inside the lab</span><small>Isolation, routing and local server</small
+            ><b aria-hidden="true">↗</b></a
+          ><a
+            href="https://github.com/ufodia/blackout-lab/blob/main/docs/testing.md"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><span>Verify it yourself</span><small>Source and browser checks</small
+            ><b aria-hidden="true">↗</b></a
+          ><a
+            href="https://github.com/ufodia/blackout-lab/blob/main/docs/reference.md"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><span>The observation model</span><small>Inputs, outcomes and limits</small
+            ><b aria-hidden="true">↗</b></a
+          >
+        </div>
+      </section>
+
+      <section class="support-section wrap" aria-labelledby="support-title">
+        <div>
+          <p class="eyebrow">INDEPENDENTLY MAINTAINED BY UFODIA</p>
+          <h2 id="support-title">Found the failure before a user did?</h2>
+          <p>
+            A coffee helps maintain browser compatibility, regression tests and clear documentation.
+            Support is voluntary; everyone gets the same open-source tool.
+          </p>
+        </div>
+        <a
+          class="button amber"
+          href="https://buymeacoffee.com/ufodia"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Buy ufodia a coffee <span aria-hidden="true">↗</span></a
+        >
+      </section>
+    </main>
+
+    <footer class="site-footer wrap">
+      <span><i></i> A quiet place to make things fail.</span>
+      <nav aria-label="Footer navigation">
+        <a
+          href="https://github.com/ufodia/blackout-lab/blob/main/LICENSE"
+          target="_blank"
+          rel="noopener noreferrer"
+          >MIT © 2026 ufodia</a
+        ><a
+          href="https://github.com/ufodia/blackout-lab/blob/main/SECURITY.md"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Security</a
+        ><a href="https://github.com/ufodia/blackout-lab" target="_blank" rel="noopener noreferrer"
+          >Source ↗</a
+        >
+      </nav>
+    </footer>
+  </body>
+</html>

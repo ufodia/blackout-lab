@@ -66,6 +66,10 @@ Screenshots, titles and URL paths remain meaningful content. They can contain pr
 
 The runner uses a fixed 1440 × 960 viewport, 10-second navigation timeout, 1.2-second observation window, 500-request budget per capture, and 45-second operation limit. Navigation failures can yield a partial snapshot with a capture note. A failed screenshot instead returns HTTP 502; the runner does not generate a placeholder PNG that could be mistaken for evidence.
 
+## Separate public installation site
+
+The tracked `site/` files explain installation and show the included demo's screenshot. `scripts/build-site.mjs` copies those reviewed static files and the workspace image into `site-dist/`; the Vercel configuration publishes that output. It does not bundle or expose the local Node/Playwright API, accept target URLs, or store experiment reports. See [deployment.md](deployment.md).
+
 ## Deliberate scope
 
 The initial product tests one URL, one viewport and one bounded initial-load scenario. It does not provide authenticated audits, scripted user journeys, provider uptime monitoring, or a resilience certificate. Keeping this scope explicit makes each report's evidence easier to review and reproduce.

@@ -19,7 +19,7 @@ The project uses the full Chromium channel. Linux CI installs OS dependencies as
 npm run verify
 ```
 
-The command combines type checking, unit tests and the production build. To inspect the built local application:
+The command combines type checking, unit tests, the local application's production build and the separate public-site build. To inspect the built local application:
 
 ```sh
 npm run build

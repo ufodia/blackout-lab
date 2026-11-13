@@ -22,6 +22,8 @@ Record the full commit SHA printed by `git rev-parse HEAD` when you need an exac
 
 To use the built local application, run `npm run build` followed by `npm start`.
 
+The separate public installation site builds with `npm run build:site`. See [deployment](deployment.md) for its Vercel configuration.
+
 ## Update an existing checkout
 
 Inspect `git status` first. Preserve local changes before pulling. With a clean checkout on `main`, update using `git pull --ff-only origin main`, then run `npm ci` and the checks again.
