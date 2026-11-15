@@ -431,7 +431,7 @@ function bindEvents(): void {
     if (expandedFrom)
       document
         .querySelector<HTMLButtonElement>(`[data-action="expand"][data-frame="${expandedFrom}"]`)
-        ?.focus({ preventScroll: true });
+        ?.focus();
   });
   dialog.addEventListener('click', (event) => {
     if (event.target === dialog) {

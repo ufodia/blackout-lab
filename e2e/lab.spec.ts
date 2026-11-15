@@ -56,6 +56,43 @@ test('keyboard-only local rehearsal retains controls and returns focus from the 
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
 });
 
+test('closing a capture returns visible focus after a short viewport change', async ({ page }) => {
+  test.setTimeout(120_000);
+  await page.setViewportSize({ width: 640, height: 512 });
+  await page.goto('/');
+  await expect(page.locator('.browser-health')).toHaveText('Test browser ready');
+  await page.getByRole('button', { name: 'Use demo', exact: true }).press('Enter');
+  await page.getByRole('button', { name: 'Inspect target', exact: true }).press('Enter');
+  const origin = page.getByRole('checkbox', {
+    name: `Block http://localhost:${new URL(page.url()).port}`,
+    exact: true,
+  });
+  await expect(origin).toBeVisible({ timeout: 40_000 });
+  await origin.press('Space');
+  await page.getByRole('button', { name: 'Run rehearsal', exact: true }).press('Enter');
+  await expect(page.getByTestId('experiment-image')).toBeVisible({ timeout: 60_000 });
+  const expand = page.getByRole('button', { name: 'Expand experiment screenshot', exact: true });
+  for (const viewport of [
+    { width: 640, height: 512 },
+    { width: 320, height: 256 },
+  ]) {
+    await test.step(`return focus at ${viewport.width}x${viewport.height}`, async () => {
+      await page.setViewportSize(viewport);
+      for (let step = 0; step < 100; step++) {
+        if (await expand.evaluate((element) => document.activeElement === element)) break;
+        await page.keyboard.press('Tab');
+      }
+      await expect(expand).toBeFocused();
+      await page.keyboard.press('Enter');
+      await expect(page.getByRole('dialog')).toBeVisible();
+      await page.keyboard.press('Escape');
+      await expect(page.getByRole('dialog')).not.toBeVisible();
+      await expect(expand).toBeFocused();
+      await expect(expand).toBeInViewport({ ratio: 1 });
+    });
+  }
+});
+
 test('local demo discovers a real dependency and captures an actual blocked-origin rehearsal', async ({
   page,
 }, testInfo) => {
