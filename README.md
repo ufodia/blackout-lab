@@ -94,6 +94,8 @@ npm run test:e2e
 
 If Blackout Lab helps you find a failure before a user does, you can [buy ufodia a coffee](https://buymeacoffee.com/ufodia). Support is voluntary and helps maintain browser compatibility, regression tests and documentation. Everyone gets the same open-source tool.
 
+You can also support this work through [GitHub Sponsors](https://github.com/sponsors/ufodia).
+
 Have a reproducible issue or an improvement? Read [CONTRIBUTING.md](CONTRIBUTING.md). Use [SECURITY.md](SECURITY.md) for sensitive findings.
 
 ## License
