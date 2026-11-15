@@ -19,7 +19,7 @@
 }
 body {
   margin: 0;
-  min-width: 340px;
+  min-width: 320px;
   font-size: 14px;
 }
 button,
@@ -2256,4 +2256,31 @@ td > span:not(.request-result),
   .service-bottom {
     flex-wrap: wrap;
   }
+}
+
+@media (max-width: 390px) {
+  .site-header {
+    flex-wrap: wrap;
+    padding-block: 14px;
+  }
+  .brand {
+    flex: 1 0 100%;
+  }
+  .header-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+@media (forced-colors: active) {
+  .service-card.is-blocked {
+    outline: 2px solid Highlight;
+    outline-offset: -3px;
+  }
+}
+
+.header-caption b,
+.url-protocol,
+.origin-count,
+.browser-chrome span {
+  color: var(--muted);
 }

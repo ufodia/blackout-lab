@@ -4,9 +4,61 @@ import { hostileTitleTarget } from './fixtures';
 
 type CaptureRequest = { origin: string; path: string; status: number | null; failed: boolean };
 
-test('local demo discovers a real dependency and captures an actual blocked-origin rehearsal', async ({
+test('keyboard-only local rehearsal retains controls and returns focus from the capture dialog', async ({
   page,
 }) => {
+  test.setTimeout(120_000);
+  await page.goto('/');
+  await expect(page.getByText('Test browser ready', { exact: true })).toBeVisible();
+  const tabTo = async (target: ReturnType<typeof page.locator>) => {
+    for (let i = 0; i < 100; i++) {
+      if (await target.evaluate((el) => el === document.activeElement)) return;
+      await page.keyboard.press('Tab');
+    }
+    throw new Error('Control is not reachable with Tab');
+  };
+  const demo = page.getByRole('button', { name: 'Use demo', exact: true });
+  await tabTo(demo);
+  await page.keyboard.press('Enter');
+  await expect(demo).toBeFocused();
+  const inspect = page.getByRole('button', { name: 'Inspect target', exact: true });
+  await tabTo(inspect);
+  await page.keyboard.press('Enter');
+  const origin = page.getByRole('checkbox', { name: 'Block http://localhost:4173', exact: true });
+  await expect(origin).toBeVisible({ timeout: 40_000 });
+  await expect(inspect).toBeFocused();
+  await tabTo(origin);
+  await page.keyboard.press('Space');
+  await expect(origin).toBeChecked();
+  await expect(origin).toBeFocused();
+  const run = page.getByRole('button', { name: 'Run rehearsal', exact: true });
+  await tabTo(run);
+  await page.keyboard.press('Enter');
+  await expect(page.getByTestId('experiment-image')).toBeVisible({ timeout: 60_000 });
+  await expect(run).toBeFocused();
+  const expand = page.getByRole('button', { name: 'Expand experiment screenshot', exact: true });
+  await tabTo(expand);
+  await page.keyboard.press('Enter');
+  const close = page.getByRole('button', { name: 'Close image', exact: true });
+  await expect(close).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(expand).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(close).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(expand).toBeFocused();
+  const save = page.getByRole('button', { name: 'Save JSON', exact: true });
+  await tabTo(save);
+  const download = page.waitForEvent('download');
+  await page.keyboard.press('Enter');
+  expect((await download).suggestedFilename()).toMatch(/\.json$/);
+  await page.setViewportSize({ width: 320, height: 900 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
+});
+
+test('local demo discovers a real dependency and captures an actual blocked-origin rehearsal', async ({
+  page,
+}, testInfo) => {
   test.setTimeout(120_000);
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
@@ -65,7 +117,7 @@ test('local demo discovers a real dependency and captures an actual blocked-orig
   const html = await readFile((await htmlFile.path())!, 'utf8');
   expect(html).toContain('data:image/png;base64,');
   expect(html).not.toMatch(/<script\b/i);
-  await page.screenshot({ path: 'docs/assets/workspace.png', fullPage: true });
+  await page.screenshot({ path: testInfo.outputPath('workspace.png'), fullPage: true });
   await selectable.uncheck();
   await expect(page.getByRole('button', { name: 'Save JSON', exact: true })).toBeDisabled();
   await expect(page.getByRole('button', { name: 'Save HTML report', exact: true })).toBeDisabled();

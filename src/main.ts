@@ -23,6 +23,7 @@ let message =
 let messageKind: 'info' | 'success' | 'error' = 'info';
 let browserHealth: 'checking' | 'ready' | 'unavailable' = 'checking';
 let expanded: 'baseline' | 'experiment' | 'inspection' | null = null;
+let expandedFrom: 'baseline' | 'experiment' | 'inspection' | null = null;
 let reportCreatedAt = '';
 
 function icon(name: string): string {
@@ -187,7 +188,37 @@ function runSummary(): string {
   return `<div data-testid="run-summary" class="observations"><div class="observation-header"><div><p class="eyebrow">OBSERVED IMPACT</p><h3>The capture tells a story.</h3></div><span class="measured-time">${icon('terminal')} ${seconds(rehearsal.elapsedMs)} measured</span></div><div class="metric-grid"><div class="metric"><span>ORIGINS SWITCHED OFF</span><strong>${rehearsal.blockedOrigins.length.toString().padStart(2, '0')}</strong><small>Explicit experiment controls</small></div><div class="metric"><span>DELIBERATELY BLOCKED</span><strong>${deliberate.toString().padStart(2, '0')}</strong><small>Failed requests to chosen origins</small></div><div class="metric"><span>UNSUCCESSFUL REQUESTS</span><strong>${before.length}<i>→</i>${after.length}</strong><small>Baseline → experiment</small></div><div class="metric"><span>EXPERIMENT CAPTURE NOTES</span><strong>${errors.length.toString().padStart(2, '0')}</strong><small>Errors and observation limits</small></div></div><details class="observation-details" ${after.length || errors.length ? 'open' : ''}><summary>Request and page observations <span>${after.length + errors.length}</span></summary><div class="request-table-wrap"><table><thead><tr><th>ORIGIN / PATH</th><th>TYPE</th><th>RESULT</th></tr></thead><tbody>${after.map((request) => `<tr><td><strong>${h(request.origin)}</strong><span>${h(request.path)}</span></td><td>${h(request.type)}</td><td><span class="request-result">${request.failed ? 'FAILED' : `HTTP ${request.status}`}</span></td></tr>`).join('') || '<tr><td colspan="3" class="no-requests">No unsuccessful requests observed in the experiment.</td></tr>'}</tbody></table></div>${errors.length ? `<div class="page-errors"><h4>CAPTURE NOTES</h4><ul>${errors.map((error) => `<li>${h(error)}</li>`).join('')}</ul></div>` : ''}</details><div class="run-provenance"><span>Report created ${h(new Date(reportCreatedAt).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'medium' }))}</span><span>Two fresh sessions · one captured page load each</span></div></div>`;
 }
 
+function rememberFocus(container: HTMLElement): () => void {
+  const active = document.activeElement;
+  if (!(active instanceof HTMLElement) || !container.contains(active)) return () => {};
+  const keys = [
+    'id',
+    'data-action',
+    'data-id',
+    'data-service-origin',
+    'data-frame',
+    'data-mode',
+    'data-field',
+    'data-part-field',
+    'aria-label',
+  ];
+  const attributes = keys.filter((key) => active.hasAttribute(key));
+  if (!attributes.length) return () => {};
+  const selector =
+    active.tagName.toLowerCase() +
+    attributes.map((key) => `[${key}="${CSS.escape(active.getAttribute(key)!)}"]`).join('');
+  const index = [...container.querySelectorAll(selector)].indexOf(active);
+  return () => {
+    if (document.activeElement !== document.body) return;
+    const matches = container.querySelectorAll<HTMLElement>(selector);
+    const next = matches[Math.min(index, matches.length - 1)];
+    if (next && !(next instanceof HTMLButtonElement && next.disabled))
+      next.focus({ preventScroll: true });
+  };
+}
+
 function render(): void {
+  const restoreFocus = rememberFocus(root!);
   const baseline = rehearsal?.baseline || inspection?.snapshot || null;
   const selected = blocked.size;
   const services = inspection?.services.filter((service) => !service.firstParty).length || 0;
@@ -197,7 +228,7 @@ function render(): void {
       : expanded === 'baseline'
         ? rehearsal?.baseline
         : inspection?.snapshot;
-  root!.innerHTML = `<header class="site-header"><a class="brand" href="./" aria-label="Blackout Lab home"><span class="brand-symbol">${icon('bolt')}</span><span>blackout<span class="brand-lab">lab</span><sup>↗</sup></span></a><span class="header-divider"></span><span class="header-caption">DEPENDENCY REHEARSAL<br><b>BREAK IT HERE. LEARN FROM IT.</b></span><div class="header-right"><span class="browser-health ${browserHealth}"><i></i>${browserHealth === 'checking' ? 'Checking test browser' : browserHealth === 'ready' ? 'Test browser ready' : 'Test browser unavailable'}</span><a class="support-link" aria-label="Keep the lab running — Buy me a coffee (opens in a new tab)" href="https://buymeacoffee.com/ufodia" target="_blank" rel="noopener noreferrer">${icon('coffee')}<span>Keep the lab running</span></a></div></header>
+  root!.innerHTML = `<header class="site-header"><a class="brand" href="./"><span class="brand-symbol">${icon('bolt')}</span><span>blackout<span class="brand-lab">lab</span><sup aria-hidden="true">↗</sup></span></a><span class="header-divider"></span><span class="header-caption">DEPENDENCY REHEARSAL<br><b>BREAK IT HERE. LEARN FROM IT.</b></span><div class="header-right"><span class="browser-health ${browserHealth}"><i></i>${browserHealth === 'checking' ? 'Checking test browser' : browserHealth === 'ready' ? 'Test browser ready' : 'Test browser unavailable'}</span><a class="support-link" aria-label="Keep the lab running — Buy me a coffee (opens in a new tab)" href="https://buymeacoffee.com/ufodia" target="_blank" rel="noopener noreferrer">${icon('coffee')}<span>Keep the lab running</span></a></div></header>
   <main><section class="intro"><div><p class="eyebrow"><span class="amber-dot"></span> CONTROLLED OUTAGES. USEFUL ANSWERS.</p><h1>Pull the plug.<br><span>Watch what survives.</span></h1><p class="intro-description">Find out what your page depends on — then take a dependency away.</p></div><div class="intro-aside"><span class="circuit-mark" aria-hidden="true"><i></i><i></i><i></i></span><p>A small rehearsal<br>for a very real outage.</p><span>LOCAL-FIRST / OPEN SOURCE</span></div></section>
   <section class="target-panel" aria-label="Test target"><div class="target-label"><span class="section-number">01</span><label for="target-url">Choose the page to rehearse</label><button class="text-button" data-action="demo" ${busy ? 'disabled' : ''}>Use demo ${icon('reset')}</button></div><form id="target-form" class="target-form"><div class="url-field">${icon('globe')}<input id="target-url" aria-label="Target URL" type="url" value="${h(targetUrl)}" placeholder="https://your-test-app.example" required autocomplete="url" spellcheck="false" ${busy ? 'disabled' : ''}><span class="url-protocol">HTTP / HTTPS</span></div><button class="button amber" type="submit" ${busy ? 'disabled' : ''}>${busy === 'inspect' ? '<span class="spinner"></span> Inspecting…' : `${icon('scan')} Inspect target`}</button></form><div class="target-disclosure">${icon('shield')}<p>Use on apps you own or have permission to test. Each capture starts fresh; your existing browser login and cookies are not copied.</p></div></section>
   <div class="status-bar ${messageKind}" role="status" aria-live="polite"><i></i><span>${h(message)}</span>${busy ? '<span class="status-working">BROWSER AT WORK<span>•••</span></span>' : ''}</div>
@@ -206,6 +237,7 @@ function render(): void {
   <section class="scope-note"><span class="scope-index">SCOPE / NOT A CERTIFICATE</span><p>These observations cover one captured page load per condition. They do not exercise every interaction, retry, login flow, websocket or dependency path. Compare the evidence, then investigate the behavior that matters to your app.</p></section><footer class="site-footer"><span><i></i> A quiet place to make things fail.</span><span>MIT © ufodia <a href="https://github.com/ufodia/blackout-lab" target="_blank" rel="noopener noreferrer">View source ↗</a></span></footer></main>
   <dialog id="capture-dialog" aria-labelledby="capture-dialog-title"><div class="dialog-header"><h2 id="capture-dialog-title">${h(expanded || 'Capture')} screenshot</h2><button class="icon-button" data-action="close-image" aria-label="Close image">${icon('close')}</button></div>${currentSnapshot && isPngDataUrl(currentSnapshot.screenshot) ? `<img src="${currentSnapshot.screenshot}" alt="Expanded ${h(expanded || '')} capture">` : '<p>Screenshot unavailable.</p>'}</dialog>`;
   bindEvents();
+  if (!expanded) restoreFocus();
   if (expanded) {
     const dialog = document.getElementById('capture-dialog') as HTMLDialogElement;
     dialog.showModal();
@@ -214,6 +246,9 @@ function render(): void {
 
 async function inspectTarget(): Promise<void> {
   if (busy) return;
+  const restoreAfter =
+    document.activeElement?.id === 'target-url' ||
+    document.activeElement?.getAttribute('type') === 'submit';
   try {
     targetUrl = validatedUrl(targetUrl);
   } catch (error) {
@@ -253,10 +288,15 @@ async function inspectTarget(): Promise<void> {
   } finally {
     busy = null;
     render();
+    if (restoreAfter && document.activeElement === document.body)
+      document
+        .querySelector<HTMLButtonElement>('button[type="submit"]')
+        ?.focus({ preventScroll: true });
   }
 }
 async function runRehearsal(): Promise<void> {
   if (busy || !inspection || !blocked.size) return;
+  const restoreAfter = (document.activeElement as HTMLElement | null)?.dataset.action === 'run';
   busy = 'rehearse';
   rehearsal = null;
   expanded = null;
@@ -289,6 +329,10 @@ async function runRehearsal(): Promise<void> {
   } finally {
     busy = null;
     render();
+    if (restoreAfter && document.activeElement === document.body)
+      document
+        .querySelector<HTMLButtonElement>('[data-action="run"]')
+        ?.focus({ preventScroll: true });
   }
 }
 function invalidateTarget(value: string): void {
@@ -337,6 +381,7 @@ function bindEvents(): void {
     if (action === 'run') void runRehearsal();
     if (action === 'expand') {
       expanded = button.dataset.frame as typeof expanded;
+      expandedFrom = expanded;
       render();
     }
     if (action === 'close-image') {
@@ -383,6 +428,10 @@ function bindEvents(): void {
   const dialog = document.getElementById('capture-dialog') as HTMLDialogElement;
   dialog.addEventListener('close', () => {
     expanded = null;
+    if (expandedFrom)
+      document
+        .querySelector<HTMLButtonElement>(`[data-action="expand"][data-frame="${expandedFrom}"]`)
+        ?.focus({ preventScroll: true });
   });
   dialog.addEventListener('click', (event) => {
     if (event.target === dialog) {

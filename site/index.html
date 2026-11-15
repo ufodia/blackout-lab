@@ -13,7 +13,10 @@
     <link rel="stylesheet" href="style.css" />
     <script src="site.js" defer></script>
     <link rel="canonical" href="https://blackout-lab.vercel.app/" />
-  <meta property="og:image" content="https://blackout-lab.vercel.app/social-preview.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://blackout-lab.vercel.app/social-preview.png"></head>
+    <meta property="og:image" content="https://blackout-lab.vercel.app/social-preview.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://blackout-lab.vercel.app/social-preview.png" />
+  </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header wrap">
@@ -128,7 +131,7 @@
               y="94"
               text-anchor="middle"
               font-size="9"
-              fill="#658399"
+              fill="#8ba8bd"
               font-family="monospace"
             >
               AN ORIGIN
@@ -148,7 +151,7 @@
               y="94"
               text-anchor="middle"
               font-size="9"
-              fill="#658399"
+              fill="#8ba8bd"
               font-family="monospace"
             >
               AN ORIGIN
@@ -305,11 +308,19 @@
         <div class="install-terminal">
           <div class="terminal-header">
             <span><i></i> GET THE LOCAL LAB</span
-            ><button id="copy-install" type="button" aria-label="Copy commands ⧉ — installation instructions">
+            ><button
+              id="copy-install"
+              type="button"
+              aria-label="Copy commands ⧉ — installation instructions"
+            >
               Copy commands <span aria-hidden="true">⧉</span>
             </button>
           </div>
-          <pre tabindex="0" role="region" aria-label="Installation commands"><code id="install-commands">git clone https://github.com/ufodia/blackout-lab.git
+          <pre
+            tabindex="0"
+            role="region"
+            aria-label="Installation commands"
+          ><code id="install-commands">git clone https://github.com/ufodia/blackout-lab.git
 cd blackout-lab
 npm ci
 npx playwright install --no-shell chromium

@@ -1391,3 +1391,31 @@ pre code {
     transition: none !important;
   }
 }
+
+/* Text over the illustration gradient is measured against its lightest stop. */
+.art-label > span:last-child {
+  color: #8ba8bd;
+}
+.experiment-art > p {
+  color: #8ba8bd;
+}
+@media (max-width: 720px) {
+  #copy-install {
+    font-size: 12px;
+  }
+}
+@media (forced-colors: active) {
+  .circuit-art text {
+    fill: CanvasText;
+  }
+  .circuit-art rect:not([fill^='url']) {
+    fill: Canvas;
+    stroke: CanvasText;
+  }
+  .circuit-art path {
+    stroke: CanvasText;
+  }
+  .circuit-art ellipse {
+    display: none;
+  }
+}
