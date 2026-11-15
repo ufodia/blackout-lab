@@ -459,7 +459,7 @@ h3 {
   border-bottom: 1px solid #253b4d;
 }
 .requirements span {
-  color: #597a94;
+  color: #65839b;
   font: 10px var(--mono);
   letter-spacing: 0.8px;
 }
@@ -738,7 +738,7 @@ pre code {
 }
 .doc-links small {
   grid-column: 1;
-  color: #65869f;
+  color: #6b8ba3;
   font-size: 11px;
   line-height: 1.7;
 }

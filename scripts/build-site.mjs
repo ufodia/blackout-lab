@@ -22,6 +22,8 @@ try {
 }
 
 const files = [
+  ['site/social-preview.png', 'social-preview.png'],
+  ['site/404.html', '404.html'],
   ['site/sitemap.xml', 'sitemap.xml'],
   ['site/robots.txt', 'robots.txt'],
   ['site/google6beb3f6bb777667e.html', 'google6beb3f6bb777667e.html'],

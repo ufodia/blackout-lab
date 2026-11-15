@@ -13,13 +13,13 @@
     <link rel="stylesheet" href="style.css" />
     <script src="site.js" defer></script>
     <link rel="canonical" href="https://blackout-lab.vercel.app/" />
-  </head>
+  <meta property="og:image" content="https://blackout-lab.vercel.app/social-preview.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://blackout-lab.vercel.app/social-preview.png"></head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header wrap">
-      <a class="brand" href="#" aria-label="Blackout Lab home">
+      <a class="brand" href="#" aria-label="blackoutlab home">
         <img src="assets/mark.svg" alt="" width="35" height="39" />
-        <span>blackout<span>lab</span><sup>↗</sup></span>
+        <span>blackout<span>lab</span><sup aria-hidden="true">↗</sup></span>
       </a>
       <nav aria-label="Main navigation">
         <a href="#how-it-works">The experiment</a>
@@ -30,6 +30,7 @@
       </nav>
       <a
         class="support-link"
+        aria-label="Keep the lab running — Buy me a coffee (opens in a new tab)"
         href="https://buymeacoffee.com/ufodia"
         target="_blank"
         rel="noopener noreferrer"
@@ -202,7 +203,7 @@
             href="assets/workspace.png"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Open the full Blackout Lab workspace screenshot"
+            aria-label="BLACKOUT LAB / LOCAL WORKSPACE ↗ — Open the full workspace screenshot"
           >
             <div class="workspace-window-bar">
               <span><i></i><i></i><i></i></span><span>BLACKOUT LAB / LOCAL WORKSPACE</span
@@ -304,11 +305,11 @@
         <div class="install-terminal">
           <div class="terminal-header">
             <span><i></i> GET THE LOCAL LAB</span
-            ><button id="copy-install" type="button" aria-label="Copy install commands">
+            ><button id="copy-install" type="button" aria-label="Copy commands ⧉ — installation instructions">
               Copy commands <span aria-hidden="true">⧉</span>
             </button>
           </div>
-          <pre><code id="install-commands">git clone https://github.com/ufodia/blackout-lab.git
+          <pre tabindex="0" role="region" aria-label="Installation commands"><code id="install-commands">git clone https://github.com/ufodia/blackout-lab.git
 cd blackout-lab
 npm ci
 npx playwright install --no-shell chromium
